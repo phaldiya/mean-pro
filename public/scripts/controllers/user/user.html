@@ -1,0 +1,107 @@
+<section class="user-info-page">
+  <header>
+    <h1>Manage Users</h1>
+    <div>
+      <a ng-href ng-click="userCtrl.setPanel(userCtrl.PANEL.ADD_USER)" ng-hide="userCtrl.PANEL.CURRENT === userCtrl.PANEL.ADD_USER">Add User</a>
+      <a ng-href ng-click="userCtrl.setPanel(userCtrl.PANEL.LIST)" ng-hide="userCtrl.PANEL.CURRENT === userCtrl.PANEL.LIST">List</a>
+    </div>
+  </header>
+  <br>
+  <div ng-if="userCtrl.PANEL.CURRENT === userCtrl.PANEL.ADD_USER">
+    <form id="userForm" name="userCtrl.userForm" class="" role="form" ng-submit="userCtrl.save(user)" novalidate>
+      <div class="form-group form-group-sm" ng-class="{'has-error': (userCtrl.userForm.$submitted || userCtrl.userForm.name.$touched) && userCtrl.userForm.name.$invalid}">
+        <label class="required control-label" for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" ng-model="user.name" placeholder="First Name"> <!--ng-required="true"-->
+        <div ng-messages="userCtrl.userForm.name.$error" ng-show="userCtrl.userForm.$submitted || userCtrl.userForm.name.$touched">
+          <div ng-messages-include="./scripts/controllers/templates/error-messages.html"></div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-sm" ng-class="{'has-error': (userCtrl.userForm.$submitted || userCtrl.userForm.email.$touched) && userCtrl.userForm.email.$invalid}">
+        <label class="required control-label" for="email">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" ng-model="user.email" placeholder="Email ex: ng-learn@examples.com"  ng-required="true">
+        <div ng-messages="userCtrl.userForm.email.$error" ng-show="userCtrl.userForm.$submitted || userCtrl.userForm.email.$touched">
+          <div ng-messages-include="./scripts/controllers/templates/error-messages.html"></div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-sm">
+        <label class="control-label" for="address">Address</label>
+        <input type="text" class="form-control" id="address" name="address" ng-model="user.address" placeholder="Street, Unit#, City, State">
+      </div>
+
+      <div class="form-group form-group-sm" ng-class="{'has-error': (userCtrl.userForm.$submitted || userCtrl.userForm.zip.$touched) && userCtrl.userForm.zip.$invalid}">
+        <label class="control-label" for="zip">Zip Code</label>
+        <input type="number" class="form-control zip" ng-maxlength="5" id="zip" name="zip" ng-model="user.zip" placeholder="zip code ex: 95616">
+        <div ng-messages="userCtrl.userForm.zip.$error" ng-show="userCtrl.userForm.$submitted || userCtrl.userForm.zip.$touched">
+          <div ng-messages-include="./scripts/controllers/templates/error-messages.html"></div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-sm" ng-class="{'has-error': (userCtrl.userForm.$submitted || userCtrl.userForm.phone.$touched) && userCtrl.userForm.phone.$invalid}">
+        <label class="control-label" for="phone">Phone Number</label>
+        <input type="number" class="form-control phone" ng-maxlength="10" id="phone" name="phone" ng-model="user.phone" placeholder="Phone Number ex: 1234567890">
+        <div ng-messages="userCtrl.userForm.phone.$error" ng-show="userCtrl.userForm.$submitted || userCtrl.userForm.phone.$touched">
+          <div ng-messages-include="./scripts/controllers/templates/error-messages.html"></div>
+        </div>
+      </div>
+
+      <div class="form-group form-group-sm" ng-class="{'has-error': (userCtrl.userForm.$submitted || userCtrl.userForm.dateOfBirth.$touched) && userCtrl.userForm.dateOfBirth.$invalid}">
+        <label class="required control-label" for="dateOfBirth">Date Of Birth</label>
+        <div class="input-group datepicker">
+          <input type="text" class="form-control"
+                 maxlength="10"
+                 placeholder="mm/dd/yyyy"
+                 datepicker-popup="MM/dd/yyyy"
+                 datepicker-options="{showWeeks: false}"
+                 show-button-bar="false"
+                 id="dateOfBirth"
+                 name="dateOfBirth"
+                 ng-model="user.dateOfBirth"
+                 is-open="userCtrl.opened.dateOfBirth"
+                 close-text="Close" ng-required="true"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default btn-sm" ng-click="userCtrl.open($event, 'dateOfBirth')"><span class="glyphicon glyphicon-calendar"></span><span class="sr-only">calendar</span></button>
+              </span>
+        </div>
+
+        <div ng-messages="userCtrl.userForm.dateOfBirth.$error" ng-show="userCtrl.userForm.$submitted || userCtrl.userForm.dateOfBirth.$touched">
+          <div ng-messages-include="./scripts/controllers/templates/error-messages.html"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+      <button type="reset" class="btn btn-sm btn-default" ng-click="userCtrl.cancelUserForm(user)">Cancel</button>
+    </form>
+  </div>
+
+  <div ng-if="userCtrl.PANEL.CURRENT === userCtrl.PANEL.LIST">
+    <table class="table table-responsive table-ordered">
+      <thead>
+        <tr>
+          <th ng-click="userCtrl.order('name')">Name<span class="glyphicon" ng-show="userCtrl.predicate === 'name'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+          <th ng-click="userCtrl.order('email')">Email<span class="glyphicon" ng-show="userCtrl.predicate === 'email'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+          <th ng-click="userCtrl.order('address')">Address<span class="glyphicon" ng-show="userCtrl.predicate === 'address'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+          <th ng-click="userCtrl.order('zip')">Zip<span class="glyphicon" ng-show="userCtrl.predicate === 'zip'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+          <th ng-click="userCtrl.order('phone')">Phone<span class="glyphicon" ng-show="userCtrl.predicate === 'phone'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+          <th ng-click="userCtrl.order('dateOfBirth')">DOB<span class="glyphicon" ng-show="userCtrl.predicate === 'dateOfBirth'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+          <th ng-click="userCtrl.order('roles')">Roles<span class="glyphicon" ng-show="userCtrl.predicate === 'roles'" ng-class="{'glyphicon-triangle-bottom': userCtrl.reverse, 'glyphicon-triangle-top': !userCtrl.reverse}"></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in userCtrl.users | orderBy:userCtrl.predicate:userCtrl.reverse">
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.address}}</td>
+          <td>{{user.zip}}</td>
+          <td>{{user.phone}}</td>
+          <td>{{user.dateOfBirth | date: 'shortDate'}}</td>
+          <td>
+              <span ng-repeat="role in user.roles">{{role.name}}{{$last ? '' : ', '}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>

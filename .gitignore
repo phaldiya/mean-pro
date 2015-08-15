@@ -1,0 +1,22 @@
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Intellij
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Mac
+.DS_Store
+
+# Node & Bower
+bower_components/
+node_modules/
+
+# Node
+npm-debug.log
+storage.bson
+mongod.lock

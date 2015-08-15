@@ -1,0 +1,52 @@
+@media print {
+
+  // Use centimeters or inches, not pixels
+  @page {
+    margin: 1.25cm 0.75cm;
+  }
+  body {
+    padding-top: 0px;
+  }
+  a[href]:after {
+    content: none;
+  }
+
+  // make transparent placeholders
+  .form-control {
+    @include placeholder(transparent);
+  }
+
+  @include responsive-invisibility('#Header');
+  @include responsive-invisibility('#Footer');
+  @include responsive-invisibility('body:after');
+  @include responsive-invisibility('button');
+  @include responsive-invisibility('.glyphicon');
+  @include responsive-invisibility('input[type="button"], input[type="submit"]');
+
+  .visible-print-inline-block-element {
+    display: inline-block !important;
+  }
+  @include responsive-visibility('.visible-print-inline-block-element.ng-hide');
+
+  .visible-print-block-element {
+    display: block !important;
+  }
+  @include responsive-visibility('.visible-print-block-element.ng-hide');
+
+  body > main.container {
+    position: absolute;
+    top: 0px;
+    height: calc(100% - 0.75cm);
+    width: 100%;
+  }
+}
+
+
+/********************************************************
+                    Page Specific
+ ********************************************************/
+.survey-page {
+  .prompt-question {
+    page-break-inside: avoid;
+  }
+}
